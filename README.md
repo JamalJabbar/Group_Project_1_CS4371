@@ -6,4 +6,4 @@
 
 ## 2.2 Building the Pipeline (Dana - Friday 11/13 by 11:59pm)
 
-## 2.3 Classifying your Streamed Data (Ayesha - Sunday 11/15 by 12:00)
+## 2.3 Classifying your Streamed Data (Ayesha - Sunday 11/15 by 12:00pm)
