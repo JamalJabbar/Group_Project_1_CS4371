@@ -44,7 +44,7 @@ Jetstream cursor. Reconnects can replay the last event, so duplicates are possib
 the cursor is not persisted across process restarts. Kafka retention settings
 determine how long the stored posts remain available.
 
-## 1 Spark Streaming with Real Time Data and Kafka (Jamal due Tuesday 11/10 11:59pm)
+## 1 Spark Streaming with Real Time Data and Kafka (Jamal - Tuesday 11/10 by 11:59pm)
 
 # 2 Text Classification of Streamed Text with PySpark
 ## 2.1 Loading Data (Zainab - Wednesday 11/11 by 11:59pm)
