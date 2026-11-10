@@ -1,0 +1,15 @@
+.venv
+.env
+.env.*
+!.env.example
+.cache
+__pycache__/
+.ipynb_checkpoints/
+*.log
+spark-warehouse/
+metastore_db/
+derby.log
+data/
+checkpoints/
+models/
+outputs/
