@@ -1,8 +1,8 @@
 # CS4371 Group Project 1 environment
 
-This workspace contains environment setup only. No Bluesky producer, entity-counting
-query, classifier, Logstash project pipeline, or Kibana visualization has been built.
-No live posts have been collected and AG News has not been downloaded or processed.
+The Bluesky producer and a recent-event reader are described in [README.md](README.md).
+The entity-counting query, classifier, Logstash project pipeline, and Kibana
+visualization have not been built; AG News has not been downloaded or processed.
 
 ## Installed tools
 
@@ -60,7 +60,7 @@ disabled to work with the existing WSL kernel settings. The service memory limit
 leave room for local Spark on this machine. Logstash currently runs the image's
 default Beats-to-console pipeline; its project-specific Kafka-to-Elasticsearch
 pipeline remains to be written. Kafka topic auto-creation is disabled and no
-project topics have been created.
+project topics are created by the producer as needed.
 
 Check or stop services:
 
@@ -95,8 +95,8 @@ This is the legacy Jetstream API matching the assignment's `commit.record.text`
 message format. It requires no account or API key. Newer Jetstream endpoints use
 a different envelope, so their examples should not be mixed with this endpoint.
 The setup check only opens and closes the WebSocket; it does not read or save posts.
-The eventual application can use `python-dotenv` to load `.env` or read environment
-variables directly. `.env` is ignored by Git.
+The producer uses the current Jetstream v2 endpoint instead, as documented in
+README.md. `.env` is ignored by Git.
 
 ## Verify the setup
 
