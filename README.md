@@ -7,7 +7,7 @@ services, Bluesky Jetstream configuration, and setup verification commands.
 For a fresh clone, follow **Recreate the Python environment** before activation.
 This setup does not include project processing code or collected data.
 
-## 1 Spark Streaming with Real Time Data and Kafka (Jamal due Tuesday 11/10 11:59pm)
+## 1 Spark Streaming with Real Time Data and Kafka (Jamal - Tuesday 11/10 by 11:59pm)
 
 # 2 Text Classification of Streamed Text with PySpark
 ## 2.1 Loading Data (Zainab - Wednesday 11/11 by 11:59pm)
