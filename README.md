@@ -131,6 +131,70 @@ metadata are saved alongside the plot.
 
 # 2 Text Classification of Streamed Text with PySpark
 ## 2.1 Loading Data (Zainab - Wednesday 11/11 by 11:59pm)
+### What it does
+`src/load_data.py` loads the two datasets used in Part 2:
+
+1. **AG News training set**: downloaded from Hugging Face
+   (`fancyzhx/ag_news`, `data/train-00000-of-00001.parquet`) into the local cache
+   and loaded into a Spark DataFrame. The script reports the number of articles per class.
+2. **Streamed Bluesky posts from Part 1**: every message in `topic1` is read with a
+   batch Kafka read (`spark.read.format("kafka")`, `startingOffsets=earliest`,
+   `endingOffsets=latest`), and only the post text (`payload.record.text`) is kept.
+   Non-English posts are dropped, whitespace is normalized, and empty and duplicate
+   messages are removed. The count is reported after each step, with a warning if fewer
+   than 1,000 messages remain.
+
+### How to run
+With the services running (`docker compose up -d --wait`) and `topic1` holding posts
+from `src/jetstream_to_kafka.py`:
+
+```bash
+source scripts/activate.sh
+python src/load_data.py
+```
+
+Options (no paths are hardcoded):
+| Option | Default | Purpose |
+| --- | --- | --- |
+| `--ag-news <path>` | download from Hugging Face | Use a local AG News training Parquet file |
+| `--bootstrap-servers` | `KAFKA_BOOTSTRAP_SERVERS` or `localhost:9092` | Kafka broker |
+| `--topic` | `topic1` | Topic holding the streamed posts |
+| `--input-file <path>` | none | Read posts from a JSON Lines file instead of Kafka, e.g. from `recent_events.py` |
+| `--all-languages` | off | Keep posts not tagged as English |
+| `--min-messages` | `1000` | Warn if fewer messages remain |
+| `--output-dir` | `outputs/part2_1` | Where outputs are written |
+
+### Outputs
+Written to `--output-dir`:
+- `ag_news_train/`: Parquet with the columns `text`, `label` (0–3) and `category`
+- `streamed_messages/`: Parquet with the columns `message_id` and `text`, the cleaned
+  posts used in 2.2 and 2.3
+- `summary.json`: the class counts and cleaning counts for the report
+
+Other scripts can import `load_ag_news`, `read_raw_posts` and `clean_posts` from
+`src/load_data.py`.
+
+### Results (run on November 11, 2026)
+| AG News class | Articles |
+| --- | --- |
+| World | 30,000 |
+| Sports | 30,000 |
+| Business | 30,000 |
+| Sci/Tech | 30,000 |
+| **Total** | **120,000** |
+
+| Streamed messages | Count |
+| --- | --- |
+| Raw messages in `topic1` | 1,335 |
+| English-tagged | 1,335 |
+| After removing empty messages | 1,335 |
+| After removing duplicates | **1,298** |
+
+The AG News training set is balanced across the four classes. All 1,335 streamed
+posts were tagged English, because the Part 1 producer already filters by language,
+and none were empty. Removing 37 duplicates left 1,298 messages, above the
+1,000-message requirement.
+
 
 ## 2.2 Building the Pipeline (Dana - Friday 11/13 by 11:59pm)
 
