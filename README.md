@@ -5,7 +5,8 @@
 See [SETUP.md](SETUP.md) for the Python dependencies, local Kafka and Elastic
 services, Bluesky Jetstream configuration, and setup verification commands.
 For a fresh clone, follow **Recreate the Python environment** before activation.
-The current implementation covers Bluesky ingestion into Kafka `topic1`.
+The current implementation covers Bluesky ingestion into Kafka `topic1` and
+running named-entity counts in `topic2`.
 
 ## Bluesky to Kafka
 
@@ -43,6 +44,33 @@ The producer waits for Kafka acknowledgement before advancing its in-memory
 Jetstream cursor. Reconnects can replay the last event, so duplicates are possible;
 the cursor is not persisted across process restarts. Kafka retention settings
 determine how long the stored posts remain available.
+
+## Named-entity counts
+
+With Kafka running, start the producer in one terminal and, in another terminal:
+
+```bash
+source scripts/activate.sh
+python src/entity_counts.py --checkpoint checkpoints/entity_counts --trigger "10 seconds"
+```
+
+The job reads `topic1` from the earliest available offset on its first run,
+extracts entities from English-tagged posts with spaCy's `en_core_web_sm` model,
+and counts mentions case-insensitively. It creates `topic2` if needed and writes
+one JSON message per entity, such as `{"entity":"london","count":3}`.
+Each trigger writes the complete current set of counts, keyed by entity. Counts
+are cumulative snapshots: downstream consumers should use the latest value for
+each key, not sum messages across triggers. spaCy's predictions may be imperfect.
+Spark's Kafka sink provides at-least-once delivery, so output messages may be
+duplicated after a failure; treating them as keyed snapshots avoids double-counting.
+Idle intervals may not produce a new snapshot when there is no input to process.
+
+The checkpoint preserves Kafka offsets and running state across restarts; keep
+the same checkpoint to resume. `--starting-offsets latest` affects only a new
+checkpoint. A new checkpoint starts a new count and can write lower values to an
+existing output topic. Set `--input-topic`, `--output-topic`, and
+`--bootstrap-servers` to change the Kafka configuration. Use a separate checkpoint
+for each independent query and keep the producer running for new posts.
 
 ## 1 Spark Streaming with Real Time Data and Kafka (Jamal - Tuesday 11/10 by 11:59pm)
 

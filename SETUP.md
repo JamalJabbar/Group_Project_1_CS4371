@@ -1,8 +1,9 @@
 # CS4371 Group Project 1 environment
 
 The Bluesky producer and a recent-event reader are described in [README.md](README.md).
-The entity-counting query, classifier, Logstash project pipeline, and Kibana
-visualization have not been built; AG News has not been downloaded or processed.
+The named-entity streaming query is also described there. The classifier,
+Logstash project pipeline, and Kibana visualization have not been built; AG News
+has not been downloaded or processed.
 
 ## Installed tools
 
