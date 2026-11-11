@@ -76,6 +76,14 @@ services:
       LS_JAVA_OPTS: -Xms256m -Xmx512m
       XPACK_MONITORING_ENABLED: "false"
       PIPELINE_WORKERS: "1"
+      PIPELINE_ORDERED: "true"
+    volumes:
+      - ./config/logstash/pipeline.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+    depends_on:
+      kafka:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
     mem_limit: 1g
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://localhost:9600/_node/pipelines >/dev/null"]

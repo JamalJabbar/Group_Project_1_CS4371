@@ -3,6 +3,7 @@ import asyncio
 import json
 import logging
 import os
+import random
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from dotenv import load_dotenv
@@ -65,7 +66,7 @@ async def stream(args):
                     LOG.info("Connected to Jetstream")
                     async for frame in websocket:
                         event = json.loads(frame)
-                        if not is_english_post(event):
+                        if not is_english_post(event) or random.random() >= args.sample_rate:
                             continue
                         data = json.dumps(event, ensure_ascii=False).encode("utf-8")
                         await asyncio.to_thread(producer.send(args.topic, value=data).get, timeout=30)
@@ -89,9 +90,12 @@ def main():
     parser.add_argument("--topic", default="topic1")
     parser.add_argument("--url", default=DEFAULT_URL, help="Jetstream v2 subscription URL")
     parser.add_argument("--max-events", type=int, default=0, help="stop after this many posts; 0 means continuous")
+    parser.add_argument("--sample-rate", type=float, default=1.0, help="fraction of English posts to keep")
     args = parser.parse_args()
     if args.max_events < 0:
         parser.error("--max-events must be nonnegative")
+    if not 0 < args.sample_rate <= 1:
+        parser.error("--sample-rate must be greater than 0 and at most 1")
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     logging.getLogger("kafka").setLevel(logging.WARNING)
     try:

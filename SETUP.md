@@ -1,9 +1,9 @@
 # CS4371 Group Project 1 environment
 
 The Bluesky producer and a recent-event reader are described in [README.md](README.md).
-The named-entity streaming query is also described there. The classifier,
-Logstash project pipeline, and Kibana visualization have not been built; AG News
-has not been downloaded or processed.
+The named-entity streaming query and Logstash-to-Kibana visualization are also
+described there. The classifier has not been built, and AG News has not been
+downloaded or processed.
 
 ## Installed tools
 
@@ -58,10 +58,9 @@ both host-based Python/Spark and container-based Logstash to connect correctly.
 Ports are bound to localhost. Elasticsearch security is disabled for this local
 development setup, so Kibana needs no login. Elasticsearch memory mapping is
 disabled to work with the existing WSL kernel settings. The service memory limits
-leave room for local Spark on this machine. Logstash currently runs the image's
-default Beats-to-console pipeline; its project-specific Kafka-to-Elasticsearch
-pipeline remains to be written. Kafka topic auto-creation is disabled and no
-project topics are created by the producer as needed.
+leave room for local Spark on this machine. Logstash reads `topic2` and writes
+the latest entity counts to Elasticsearch. Kafka topic auto-creation is disabled;
+the producer and streaming query create their project topics as needed.
 
 Check or stop services:
 
