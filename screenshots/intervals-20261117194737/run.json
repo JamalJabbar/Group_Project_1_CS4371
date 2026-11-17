@@ -1,0 +1,223 @@
+{
+  "run_id": "intervals-20261117194737",
+  "started_utc": "2026-11-17T19:47:56.992777+00:00",
+  "sample_rate": 0.02,
+  "kibana_url": "http://localhost:5601/app/visualize#/edit/cs4371-top-entities-intervals-20261117194737",
+  "note": "A 2% sample of English-tagged posts was collected. The producer briefly paused at each milestone while Spark and Elasticsearch caught up. After a chart refresh issue, the 10-, 15-, and 20-minute images were rendered later in Kibana from the verified counts saved at each milestone.",
+  "snapshots": [
+    {
+      "elapsed_minutes": 5,
+      "milestone_utc": "2026-11-17T19:52:56.993261+00:00",
+      "screenshot_utc": "2026-11-17T19:53:14.716746+00:00",
+      "start_offset": 571,
+      "end_offset_exclusive": 763,
+      "posts": 192,
+      "top_entities": [
+        {
+          "entity": "trump",
+          "count": 3
+        },
+        {
+          "entity": "adig",
+          "count": 2
+        },
+        {
+          "entity": "ai",
+          "count": 2
+        },
+        {
+          "entity": "french",
+          "count": 2
+        },
+        {
+          "entity": "russia",
+          "count": 2
+        },
+        {
+          "entity": "the white house",
+          "count": 2
+        },
+        {
+          "entity": "ukraine",
+          "count": 2
+        },
+        {
+          "entity": "104",
+          "count": 1
+        },
+        {
+          "entity": "adi global distribution",
+          "count": 1
+        },
+        {
+          "entity": "alan milburn’s",
+          "count": 1
+        }
+      ],
+      "screenshot": "05-minutes.png",
+      "screenshot_method": "Kibana chart captured from the live Elasticsearch index at the milestone"
+    },
+    {
+      "elapsed_minutes": 10,
+      "milestone_utc": "2026-11-17T19:57:56.994264+00:00",
+      "screenshot_utc": "2026-11-17T19:59:41.620652+00:00",
+      "start_offset": 571,
+      "end_offset_exclusive": 957,
+      "posts": 386,
+      "top_entities": [
+        {
+          "entity": "trump",
+          "count": 8
+        },
+        {
+          "entity": "ai",
+          "count": 3
+        },
+        {
+          "entity": "adig",
+          "count": 2
+        },
+        {
+          "entity": "cr",
+          "count": 2
+        },
+        {
+          "entity": "djt",
+          "count": 2
+        },
+        {
+          "entity": "french",
+          "count": 2
+        },
+        {
+          "entity": "gop",
+          "count": 2
+        },
+        {
+          "entity": "igf",
+          "count": 2
+        },
+        {
+          "entity": "round",
+          "count": 2
+        },
+        {
+          "entity": "russia",
+          "count": 2
+        }
+      ],
+      "screenshot": "10-minutes.png",
+      "original_capture_attempt_utc": "2026-11-17T19:58:07.392481+00:00",
+      "screenshot_method": "Kibana chart rendered from the verified Kafka and Elasticsearch counts saved at the milestone",
+      "snapshot_kibana_url": "http://localhost:5601/app/visualize#/edit/cs4371-snapshot-intervals-20261117194737-10"
+    },
+    {
+      "elapsed_minutes": 15,
+      "milestone_utc": "2026-11-17T20:02:56.993237+00:00",
+      "screenshot_utc": "2026-11-17T20:03:44.575760+00:00",
+      "start_offset": 571,
+      "end_offset_exclusive": 1143,
+      "posts": 572,
+      "top_entities": [
+        {
+          "entity": "trump",
+          "count": 10
+        },
+        {
+          "entity": "ai",
+          "count": 4
+        },
+        {
+          "entity": "french",
+          "count": 3
+        },
+        {
+          "entity": "nhl",
+          "count": 3
+        },
+        {
+          "entity": "stupid",
+          "count": 3
+        },
+        {
+          "entity": "us",
+          "count": 3
+        },
+        {
+          "entity": "us consumers",
+          "count": 3
+        },
+        {
+          "entity": "adig",
+          "count": 2
+        },
+        {
+          "entity": "america",
+          "count": 2
+        },
+        {
+          "entity": "american",
+          "count": 2
+        }
+      ],
+      "screenshot": "15-minutes.png",
+      "original_capture_attempt_utc": "2026-11-17T20:03:07.524091+00:00",
+      "screenshot_method": "Kibana chart rendered from the verified Kafka and Elasticsearch counts saved at the milestone",
+      "snapshot_kibana_url": "http://localhost:5601/app/visualize#/edit/cs4371-snapshot-intervals-20261117194737-15"
+    },
+    {
+      "elapsed_minutes": 20,
+      "milestone_utc": "2026-11-17T20:07:56.993155+00:00",
+      "screenshot_utc": "2026-11-17T20:08:40.757396+00:00",
+      "start_offset": 571,
+      "end_offset_exclusive": 1326,
+      "posts": 755,
+      "top_entities": [
+        {
+          "entity": "trump",
+          "count": 11
+        },
+        {
+          "entity": "ai",
+          "count": 6
+        },
+        {
+          "entity": "france",
+          "count": 5
+        },
+        {
+          "entity": "us",
+          "count": 5
+        },
+        {
+          "entity": "america",
+          "count": 3
+        },
+        {
+          "entity": "denmark",
+          "count": 3
+        },
+        {
+          "entity": "french",
+          "count": 3
+        },
+        {
+          "entity": "gta",
+          "count": 3
+        },
+        {
+          "entity": "nhl",
+          "count": 3
+        },
+        {
+          "entity": "russia",
+          "count": 3
+        }
+      ],
+      "screenshot": "20-minutes.png",
+      "original_capture_attempt_utc": "2026-11-17T20:08:07.705535+00:00",
+      "screenshot_method": "Kibana chart rendered from the verified Kafka and Elasticsearch counts saved at the milestone",
+      "snapshot_kibana_url": "http://localhost:5601/app/visualize#/edit/cs4371-snapshot-intervals-20261117194737-20"
+    }
+  ]
+}
