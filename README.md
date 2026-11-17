@@ -196,6 +196,75 @@ and none were empty. Removing 37 duplicates left 1,298 messages, above the
 1,000-message requirement.
 
 
-## 2.2 Building the Pipeline (Dana - Friday 11/13 by 11:59pm)
+## 2.2 Building the Pipeline (Ayesha - Friday 11/13 by 11:59pm)
+### What it does
+`src/train_pipeline.py` builds an MLlib `Pipeline` that turns raw text into a
+predicted AG News class, fits it on the AG News training set, and saves the fitted
+`PipelineModel`. The stages are:
 
-## 2.3 Classifying your Streamed Data (Ayesha - Sunday 11/15 by 12:00pm)
+| Stage | Settings | Output column |
+| --- | --- | --- |
+| `RegexTokenizer` | lowercase; splits on anything other than letters, digits and apostrophes; drops tokens shorter than 2 characters | `words` |
+| `StopWordsRemover` | Spark's default English stop-word list | `filtered` |
+| `HashingTF` | 2^18 = 262,144 features | `tf` |
+| `IDF` | `minDocFreq=5`, ignoring very rare terms | `features` |
+| `LogisticRegression` | multinomial, `regParam=0.01` (L2), `maxIter=100` | `prediction`, `probability` |
+
+HashingTF was chosen over CountVectorizer because it needs no vocabulary pass, so it
+handles words in the streamed posts that never appear in AG News. 2^18 buckets keep
+hash collisions low for a ~60,000-word news vocabulary.
+
+The script first fits the pipeline on a random 80% of the articles and scores it on
+the other 20%, to measure accuracy. It then refits on all 120,000 articles and saves
+that final model. Finally, it reloads the saved model from disk and classifies four
+example headlines, to confirm the saved model works.
+
+### How to run
+No services are needed: AG News is downloaded from Hugging Face on the first run.
+
+```bash
+source scripts/activate.sh
+python src/train_pipeline.py
+```
+
+Training takes a few minutes on a laptop. Options (no paths are hardcoded):
+
+| Option | Default | Purpose |
+| --- | --- | --- |
+| `--model-path <path>` | `models/ag_news_lr` | Where the fitted `PipelineModel` is saved |
+| `--ag-news <path>` | download from Hugging Face | Use a local AG News training Parquet file |
+| `--output-dir <path>` | `outputs/part2_2` | Where `metrics.json` is written |
+| `--num-features` | `262144` | HashingTF buckets |
+| `--min-doc-freq` | `5` | IDF minimum document frequency |
+| `--reg-param`, `--elastic-net`, `--max-iter` | `0.01`, `0`, `100` | LogisticRegression settings |
+| `--test-fraction` | `0.2` | Held out for evaluation; `0` skips evaluation |
+| `--seed` | `42` | Random split seed |
+
+`models/` and `outputs/` are not in Git, so each person who needs the model must run
+this script or receive a copy of the model folder.
+
+### Using the model in 2.3
+```python
+from pyspark.ml import PipelineModel
+model = PipelineModel.load("models/ag_news_lr")
+predictions = model.transform(posts)   # posts needs a string column named "text"
+```
+`prediction` is a number from 0 to 3. Map it with `CLASS_NAMES` from
+`src/load_data.py`: 0 World, 1 Sports, 2 Business, 3 Sci/Tech. `probability` is
+a vector of the four class probabilities.
+
+### Results (run on November 14, 2026)
+Held-out accuracy on 24,063 articles: **89.8%** (weighted F1 0.898).
+
+| True \ predicted | World | Sports | Business | Sci/Tech |
+| --- | --- | --- | --- | --- |
+| World | **5,315** | 179 | 308 | 211 |
+| Sports | 115 | **5,812** | 58 | 50 |
+| Business | 225 | 40 | **5,213** | 521 |
+| Sci/Tech | 220 | 50 | 480 | **5,266** |
+
+Sports is the easiest class. Most mistakes are between Business and Sci/Tech, since
+technology-company news fits both. The reloaded model labeled all four example
+headlines correctly (Sports 0.82, Business 0.88, Sci/Tech 0.71, World 0.68).
+
+## 2.3 Classifying your Streamed Data (Dana - Sunday 11/15 by 12:00pm)
