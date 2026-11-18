@@ -1,0 +1,67 @@
+{
+  "file": "outputs/part2_3/manual_labels.csv",
+  "total_rows": 50,
+  "labeled_rows": 50,
+  "none_of_these": 32,
+  "four_class_rows": 18,
+  "correct_four_class": 10,
+  "four_class_accuracy": 0.5555555555555556,
+  "incorrect_examples": [
+    {
+      "message_id": "8589934646",
+      "text": "It was the \u201860s, land was cheap.",
+      "human_label": "Business",
+      "model_prediction": "Sci/Tech",
+      "model_probability": "0.7326662648989598"
+    },
+    {
+      "message_id": "8589934618",
+      "text": "You must come and have a climb! #AnipalHB #MountaineeringBears #gardenstuff",
+      "human_label": "Sports",
+      "model_prediction": "Sci/Tech",
+      "model_probability": "0.30130067100788027"
+    },
+    {
+      "message_id": "8589934858",
+      "text": "its a data center of Epstein files.",
+      "human_label": "World",
+      "model_prediction": "Sports",
+      "model_probability": "0.3513400661330794"
+    },
+    {
+      "message_id": "8589934887",
+      "text": "With that news when he got there, he promptly took 7 months for a family roadtrip. A natural response. Since then no problems have been addressed, they\u2019re more interested in passing off blame and plotting to grift as much $ as possible.",
+      "human_label": "World",
+      "model_prediction": "Sports",
+      "model_probability": "0.5055175026886569"
+    },
+    {
+      "message_id": "8589934780",
+      "text": "Sarcasm about mainstream media bar and diner interviews of MAGAs who parrot whatever Right Wing media told them, while the interviewer acts as if these are their own individual ideas",
+      "human_label": "World",
+      "model_prediction": "Sci/Tech",
+      "model_probability": "0.5440718814292494"
+    },
+    {
+      "message_id": "109",
+      "text": "You are the stupid one if you think I am going to take the verdict of a Bluesky anon over those of the International Association of Genocide Scholars, the UN, & the evidence of my own eyes & ears. Your sort of gaslighting, incompetent as it is, is nauseating. You are as guilty as any Nazi apologist",
+      "human_label": "World",
+      "model_prediction": "Sci/Tech",
+      "model_probability": "0.4583923377016765"
+    },
+    {
+      "message_id": "8589934715",
+      "text": ":o That is because they, too, are capitalists and do not like the prospect that accountability should become a common feature of American politics.",
+      "human_label": "World",
+      "model_prediction": "Sci/Tech",
+      "model_probability": "0.6585000938950513"
+    },
+    {
+      "message_id": "79",
+      "text": "I am sure the bribes from these 3 companies are flowing in fast and furious Duffy said billions are needed to build a \"brand new architecture\" for the network and said companies \u2014 including AT&T, Verizon and Lumen \u2014 are ready to deploy it \"tomorrow\" . www.yahoo.com/news/politic...",
+      "human_label": "Business",
+      "model_prediction": "Sci/Tech",
+      "model_probability": "0.903240591724434"
+    }
+  ]
+}
