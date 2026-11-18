@@ -8,6 +8,7 @@ For a fresh clone, follow **Recreate the Python environment** before activation.
 Part 1 streams Bluesky posts through Kafka and Spark, indexes named-entity
 counts with Logstash and Elasticsearch, and visualizes them in Kibana.
 
+# 1 Spark Streaming with Real Time Data and Kafka (Jamal)
 ## Bluesky to Kafka
 
 From this directory, activate the environment and start only Kafka:
@@ -127,10 +128,8 @@ was reprocessed with the refined named-entity filter. A screenshot from Kibana
 is saved as `outputs/kibana-5-minutes.png`; the accompanying JSON and test
 metadata are saved alongside the plot.
 
-## 1 Spark Streaming with Real Time Data and Kafka (Jamal - Tuesday 11/10 by 11:59pm)
-
 # 2 Text Classification of Streamed Text with PySpark
-## 2.1 Loading Data (Zainab - Wednesday 11/11 by 11:59pm)
+## 2.1 Loading Data (Zainab)
 ### What it does
 `src/load_data.py` loads the two datasets used in Part 2:
 
@@ -196,7 +195,7 @@ and none were empty. Removing 37 duplicates left 1,298 messages, above the
 1,000-message requirement.
 
 
-## 2.2 Building the Pipeline (Ayesha - Friday 11/13 by 11:59pm)
+## 2.2 Building the Pipeline (Ayesha)
 ### What it does
 `src/train_pipeline.py` builds an MLlib `Pipeline` that turns raw text into a
 predicted AG News class, fits it on the AG News training set, and saves the fitted
@@ -267,4 +266,59 @@ Sports is the easiest class. Most mistakes are between Business and Sci/Tech, si
 technology-company news fits both. The reloaded model labeled all four example
 headlines correctly (Sports 0.82, Business 0.88, Sci/Tech 0.71, World 0.68).
 
-## 2.3 Classifying your Streamed Data (Dana - Sunday 11/15 by 12:00pm)
+## 2.3 Classifying your Streamed Data (Dana)
+
+### Batch classification and manual evaluation
+
+After running Parts 2.1 and 2.2, classify every cleaned streamed message:
+
+```bash
+source .venv/bin/activate
+python src/classify_streamed.py
+```
+
+The default inputs are `outputs/part2_1/streamed_messages` and
+`models/ag_news_lr`. Paths can be changed with `--input-path`, `--model-path`,
+and `--output-dir`.
+
+Outputs are written under `outputs/part2_3/`:
+
+- `predictions.parquet/` and `predictions.json/`: one prediction per message
+- `class_counts.json`: predicted counts for World, Sports, Business and Sci/Tech
+- `examples.json`: up to five examples for each predicted class
+- `manual_labels.csv`: 50 randomly selected messages for hand labeling
+
+Open `manual_labels.csv` and set `human_label` to `World`, `Sports`, `Business`,
+`Sci/Tech`, or `None of these` for every row. Then calculate the required
+four-class accuracy:
+
+```bash
+python src/classify_streamed.py --evaluate-manual-labels
+```
+
+Messages labeled `None of these` are reported separately and excluded from the
+four-class accuracy calculation. Incorrect examples are saved in
+`outputs/part2_3/manual_evaluation.json`.
+
+### Real-time classification
+
+With Kafka running, start the real-time classifier:
+
+```bash
+python src/classify_realtime.py --starting-offsets latest
+```
+
+It reads `topic1`, applies the saved model, and prints complete running counts
+by predicted class every 10 seconds. Use `--starting-offsets earliest` to
+classify records already stored in Kafka. The classifier uses its own
+`checkpoints/text_classifier` checkpoint and does not share the Part 1 entity
+counter checkpoint.
+
+To generate new records while the classifier is running, use another terminal:
+
+```bash
+python src/jetstream_to_kafka.py --max-events 50
+```
+
+All Kafka, model, input, output and checkpoint paths remain configurable through
+the command-line options.
